@@ -1,0 +1,239 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Main {
+
+    public static void main(String[] args){
+        SwingUtilities.invokeLater(Main::criarTelaInicio);
+}
+
+// Método para criar a tela inicial.
+public static void criarTelaInicio() {
+    // Definição das cores utilizadas na interface.
+    Color corFundo = new Color(38, 49, 63);
+    Color corBotao = new Color(39, 186, 112);
+    Color corTextoBotao = new Color(255, 255, 255);
+
+    // Criação do JFrame principal.
+    JFrame frame = new JFrame("LucraMais");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Define a operação padrão ao fechar o JFrame.
+    frame.setSize(500, 300); // Define o tamanho inicial do JFrame.
+    frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximize a tela
+
+    // Painel principal que conterá os componentes da interface.
+    JPanel panel = new JPanel();
+    panel.setLayout(new GridBagLayout()); // Define o layout como GridBagLayout.
+    panel.setBackground(corFundo); // Define a cor de fundo do painel.
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(10, 10, 10, 10);
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+
+    // Criação e configuração do rótulo de título.
+    JLabel tituloLabel = new JLabel("LucraMais");
+    tituloLabel.setFont(new Font("Calibri", Font.BOLD, 86));
+    tituloLabel.setForeground(Color.WHITE);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.gridwidth = 2;
+    gbc.anchor = GridBagConstraints.CENTER;
+    panel.add(tituloLabel, gbc);
+
+    // Criação e configuração do botão de iniciar.
+    JButton iniciarButton = new JButton("Iniciar");
+    iniciarButton.setBackground(corBotao);
+    iniciarButton.setForeground(corTextoBotao);
+    iniciarButton.setFont(new Font("Calibri", Font.BOLD, 60));
+    gbc.gridx = 0;
+    gbc.gridy = 1;
+    gbc.gridwidth = 2;
+    gbc.anchor = GridBagConstraints.CENTER;
+    panel.add(iniciarButton, gbc);
+
+    // Adiciona o painel ao JFrame e torna o JFrame visível.
+    frame.add(panel);
+    frame.setVisible(true);
+
+    // Define o que acontece quando o botão de iniciar é pressionado.
+    iniciarButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            frame.getContentPane().removeAll(); // Remove todos os componentes do conteúdo do JFrame.
+            criarTelaCadastroProduto(frame); // Chama o método para criar a tela de cadastro de produtos.
+        }
+    });
+}
+
+// Método para criar a tela de cadastro de produtos.
+public static void criarTelaCadastroProduto(JFrame frame) {
+    // Definição das cores utilizadas na interface.
+    Color corFundo = new Color(38, 49, 63);
+    Color corTexto = new Color(145, 155, 166);
+    Color corBotao = new Color(45, 55, 72);
+    Color corCalcular = new Color(39, 186, 112);
+    Color corSair = new Color(210, 90, 86);
+    Color corCalcularFundo = new Color(203, 215, 215);
+    Color corTextoResu = new Color(0, 0, 0);
+    // Definição das fontes utilizadas na interface.
+    Font fonteGrande = new Font("JetBrains Mono", Font.BOLD, 38);
+    Font fonteTitulo = new Font("Calibri", Font.BOLD, 58);
+
+    // Criação do painel para a tela de cadastro de produtos.
+    JPanel panel = new JPanel();
+    panel.setLayout(new GridBagLayout());
+    panel.setBackground(corFundo); // Define a cor de fundo do painel.
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(10, 10, 10, 10);
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+
+    // Criação e configuração do rótulo de título.
+    JLabel tituloLabel = new JLabel("Cadastro de Produto");
+    tituloLabel.setForeground(Color.WHITE);
+    tituloLabel.setFont(fonteTitulo);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.gridwidth = 3;
+    gbc.anchor = GridBagConstraints.CENTER;
+    panel.add(tituloLabel, gbc);
+
+    gbc.gridwidth = 1;
+    gbc.anchor = GridBagConstraints.WEST;
+
+
+    String[] labels = {"Nome do Produto:", "Custo Total do Material:", "Quantidade Produzida:", "Margem de Lucro Esperado:"};
+    // Loop para criar e configurar os rótulos dos campos de entrada.
+    for (int i = 0; i < labels.length; i++) {
+        JLabel label = new JLabel(labels[i]);
+        label.setForeground(Color.WHITE);
+        label.setFont(fonteGrande);
+        gbc.gridx = 0;
+        gbc.gridy = i + 1;
+        panel.add(label, gbc);
+    }
+
+    // Array para armazenar os campos de entrada de texto.
+    JTextField[] textFields = new JTextField[labels.length];
+    // Loop para criar e configurar os campos de entrada de texto.
+    for (int i = 0; i < textFields.length; i++) {
+        textFields[i] = new JTextField(20);
+        textFields[i].setForeground(Color.white);
+        textFields[i].setBackground(corBotao);
+        textFields[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        textFields[i].setFont(fonteGrande);
+        gbc.gridx = 1;
+        gbc.gridy = i + 1;
+        gbc.gridwidth = 2;
+        panel.add(textFields[i], gbc);
+    }
+
+    // Criação e configuração do botão de calcular.
+    JButton calcularButton = new JButton("Calcular");
+    calcularButton.setBackground(corCalcular);
+    calcularButton.setForeground(Color.WHITE);
+    calcularButton.setFont(fonteGrande);
+    gbc.gridx = 0;
+    gbc.gridy = 6;
+    gbc.gridwidth = 3;
+    panel.add(calcularButton, gbc);
+
+    // Criação e configuração da área de resultado.
+    JTextArea resultadoArea = new JTextArea(5, 20);
+    resultadoArea.setEditable(false);
+    resultadoArea.setBackground(corCalcularFundo);
+    resultadoArea.setForeground(corTextoResu);
+    resultadoArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    resultadoArea.setFont(fonteGrande);
+    gbc.gridx = 0;
+    gbc.gridy = 7;
+    gbc.gridwidth = 3;
+    panel.add(new JScrollPane(resultadoArea), gbc);
+
+    // Criação e configuração do botão de limpar.
+    JButton limparButton = new JButton("Limpar");
+    limparButton.setBackground(Color.WHITE);
+    limparButton.setForeground(corTextoResu);
+    limparButton.setFont(fonteGrande);
+    gbc.gridx = 0;
+    gbc.gridy = 8;
+    gbc.gridwidth = 1;
+    panel.add(limparButton, gbc);
+
+    // Criação e configuração do botão de sair.
+    JButton sairButton = new JButton("Sair");
+    sairButton.setBackground(corSair);
+    sairButton.setForeground(Color.WHITE);
+    sairButton.setFont(fonteGrande);
+    gbc.gridx = 2;
+    gbc.gridy = 8;
+    panel.add(sairButton, gbc);
+
+    // Criação e configuração do rótulo de rodapé.
+    JLabel rodapeLabel = new JLabel("© 2024 LucraMais Inc.");
+    rodapeLabel.setForeground(Color.WHITE);
+    rodapeLabel.setFont(new Font("Arial", Font.ITALIC, 12));
+    gbc.gridx = 0;
+    gbc.gridy = 9;
+    gbc.gridwidth = 3;
+    gbc.anchor = GridBagConstraints.CENTER;
+    panel.add(rodapeLabel, gbc);
+
+    // Define o que acontece quando o botão de calcular é pressionado.
+    calcularButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                // Obtém os valores dos campos de entrada e realiza o cálculo.
+                String nomeProduto = textFields[0].getText();
+                double custoTotalMaterial = Double.parseDouble(textFields[1].getText());
+                int quantidadeProduzida = Integer.parseInt(textFields[2].getText());
+                double porcentagemLucro = Double.parseDouble(textFields[3].getText());
+
+                double custoUnitario = custoTotalMaterial / quantidadeProduzida;
+                double precoVendaSemLucro = custoUnitario;
+                double precoVendaComLucro = custoUnitario * (1 + porcentagemLucro / 100);
+
+                // Exibe o resultado na área de resultado.
+                resultadoArea.setText(String.format(
+                        "Informações do Produto:\n" +
+                                "Nome: %s\n" +
+                                "Preço de Venda Sem Lucro: R$ %.2f\n" +
+                                "Preço de Venda Com Lucro: R$ %.2f",
+                        nomeProduto, precoVendaSemLucro, precoVendaComLucro));
+            } catch (NumberFormatException ex) {
+                // Exibe uma mensagem de erro se ocorrer um erro de formato ao converter os valores.
+                JOptionPane.showMessageDialog(frame, "Por favor, insira valores válidos.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    });
+
+    // Define o que acontece quando o botão de limpar é pressionado.
+    limparButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Limpa os campos de entrada e a área de resultado.
+            for (JTextField textField : textFields) {
+                textField.setText("");
+            }
+            resultadoArea.setText("");
+        }
+    });
+
+    // Define o que acontece quando o botão de sair é pressionado.
+    sairButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Fecha o aplicativo.
+            System.exit(0);
+        }
+    });
+
+    // Remove todos os componentes do conteúdo do JFrame, adiciona o painel com a tela de cadastro de produtos,
+    // valida o layout e redesenha o JFrame para tornar as alterações visíveis.
+    frame.getContentPane().removeAll();
+    frame.add(panel);
+    frame.validate();
+    frame.repaint();
+    frame.setVisible(true);
+}
+}
