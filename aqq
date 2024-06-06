@@ -1,0 +1,188 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+class Empresa {
+    private List<Produto> produtos;
+    private List<Cliente> clientes;
+
+    public Empresa() {
+        produtos = new ArrayList<>();
+        clientes = new ArrayList<>();
+    }
+
+    public void adicionarProduto(Produto produto) {
+        produtos.add(produto);
+    }
+
+    public void adicionarCliente(Cliente cliente) {
+        clientes.add(cliente);
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+}
+
+class Produto {
+    private String nome;
+    private double preco;
+
+    public Produto(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    @Override
+    public String toString() {
+        return nome + " - R$ " + preco;
+    }
+}
+
+class Cliente {
+    private String nome;
+    private String email;
+
+    public Cliente(String nome, String email) {
+        this.nome = nome;
+        this.email = email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public String toString() {
+        return nome + " - " + email;
+    }
+}
+
+public class MainApp {
+    private Empresa empresa;
+    private JFrame frame;
+    private JTextArea displayArea;
+
+    public MainApp() {
+        empresa = new Empresa();
+        frame = new JFrame("Cadastro de Empresa");
+        displayArea = new JTextArea(10, 30);
+        displayArea.setEditable(false);
+        setupUI();
+    }
+
+    private void setupUI() {
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+        placeComponents(panel);
+
+        frame.setVisible(true);
+    }
+
+    private void placeComponents(JPanel panel) {
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JButton addProdutoButton = new JButton("Adicionar Produto");
+        JButton addClienteButton = new JButton("Adicionar Cliente");
+
+        addProdutoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                adicionarProduto();
+            }
+        });
+
+        addClienteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                adicionarCliente();
+            }
+        });
+
+        panel.add(addProdutoButton);
+        panel.add(addClienteButton);
+        panel.add(new JScrollPane(displayArea));
+    }
+
+    private void adicionarProduto() {
+        JTextField nomeField = new JTextField(5);
+        JTextField precoField = new JTextField(5);
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Nome:"));
+        panel.add(nomeField);
+        panel.add(Box.createHorizontalStrut(15));
+        panel.add(new JLabel("Preço:"));
+        panel.add(precoField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, 
+                 "Adicionar Produto", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String nome = nomeField.getText();
+            double preco = Double.parseDouble(precoField.getText());
+            Produto produto = new Produto(nome, preco);
+            empresa.adicionarProduto(produto);
+            atualizarDisplay();
+        }
+    }
+
+    private void adicionarCliente() {
+        JTextField nomeField = new JTextField(5);
+        JTextField emailField = new JTextField(5);
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Nome:"));
+        panel.add(nomeField);
+        panel.add(Box.createHorizontalStrut(15));
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, 
+                 "Adicionar Cliente", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String nome = nomeField.getText();
+            String email = emailField.getText();
+            Cliente cliente = new Cliente(nome, email);
+            empresa.adicionarCliente(cliente);
+            atualizarDisplay();
+        }
+    }
+
+    private void atualizarDisplay() {
+        displayArea.setText("");
+        displayArea.append("Produtos:\n");
+        for (Produto produto : empresa.getProdutos()) {
+            displayArea.append(produto.toString() + "\n");
+        }
+        displayArea.append("\nClientes:\n");
+        for (Cliente cliente : empresa.getClientes()) {
+            displayArea.append(cliente.toString() + "\n");
+        }
+    }
+
+    public static void main(String[] args) {
+        new MainApp();
+    }
+}
